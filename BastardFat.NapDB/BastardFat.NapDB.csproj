@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{AEF55DAA-7A09-4790-9A3B-DC18A47379BD}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>BastardFat.NapDB</RootNamespace>
+    <AssemblyName>BastardFat.NapDB</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Abstractions\INapDbSetCollection.cs" />
+    <Compile Include="Abstractions\NapDbPropertyProxy.cs" />
+    <Compile Include="Abstractions\INapDb.cs" />
+    <Compile Include="Abstractions\INapDbCache.cs" />
+    <Compile Include="Abstractions\INapDbEntity.cs" />
+    <Compile Include="Abstractions\INapDbMeta.cs" />
+    <Compile Include="Abstractions\INapDbProxier.cs" />
+    <Compile Include="Abstractions\INapDbFileIO.cs" />
+    <Compile Include="Abstractions\INapDbSerializer.cs" />
+    <Compile Include="Abstractions\INapDbSet.cs" />
+    <Compile Include="Access\NapDbSetCollection.cs" />
+    <Compile Include="Caching\NapDbCache.cs" />
+    <Compile Include="Caching\NapDbCachedEntity.cs" />
+    <Compile Include="Config\Builders\IRelationBuilder.cs" />
+    <Compile Include="Config\Builders\RelationBuilder.cs" />
+    <Compile Include="Config\Relations\NapDbRelation.cs" />
+    <Compile Include="Exceptions\NapDbInitializationException.cs" />
+    <Compile Include="Exceptions\NapDbException.cs" />
+    <Compile Include="FileSystem\NapDbFileIO.cs" />
+    <Compile Include="NapDb.cs" />
+    <Compile Include="NapDbSet.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Proxy\" />
+    <Folder Include="Serialization\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
