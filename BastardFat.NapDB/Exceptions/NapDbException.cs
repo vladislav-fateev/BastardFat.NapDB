@@ -9,10 +9,10 @@ namespace BastardFat.NapDB.Exceptions
     [Serializable]
     public class NapDbException : Exception
     {
-        public string DatabaseRoot { get; }
+        public string DatabaseName { get; }
 
-        public NapDbException(string databaseRoot, string message) : base(message) { DatabaseRoot = databaseRoot; }
-        public NapDbException(string databaseRoot, string message, Exception inner) : base(message, inner) { DatabaseRoot = databaseRoot; }
+        public NapDbException(string databaseName, string message) : base(message) { DatabaseName = databaseName; }
+        public NapDbException(string databaseName, string message, Exception inner) : base(message, inner) { DatabaseName = databaseName; }
         protected NapDbException(
           System.Runtime.Serialization.SerializationInfo info,
           System.Runtime.Serialization.StreamingContext context) : base(info, context) { }

@@ -1,6 +1,6 @@
 ﻿namespace BastardFat.NapDB.Abstractions
 {
-    public interface INapDbEntity<TKey> 
+    public interface IEntity<TKey> 
     {
         TKey Id { get; set; }
     }

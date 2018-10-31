@@ -41,29 +41,25 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Abstractions\INapDbSetCollection.cs" />
-    <Compile Include="Abstractions\NapDbPropertyProxy.cs" />
     <Compile Include="Abstractions\INapDb.cs" />
-    <Compile Include="Abstractions\INapDbCache.cs" />
-    <Compile Include="Abstractions\INapDbEntity.cs" />
+    <Compile Include="Abstractions\IEntity.cs" />
     <Compile Include="Abstractions\INapDbMeta.cs" />
-    <Compile Include="Abstractions\INapDbProxier.cs" />
-    <Compile Include="Abstractions\INapDbFileIO.cs" />
+    <Compile Include="Abstractions\IFileReader.cs" />
     <Compile Include="Abstractions\INapDbSerializer.cs" />
-    <Compile Include="Abstractions\INapDbSet.cs" />
-    <Compile Include="Access\NapDbSetCollection.cs" />
-    <Compile Include="Caching\NapDbCache.cs" />
-    <Compile Include="Caching\NapDbCachedEntity.cs" />
-    <Compile Include="Config\Builders\IRelationBuilder.cs" />
-    <Compile Include="Config\Builders\RelationBuilder.cs" />
-    <Compile Include="Config\Relations\NapDbRelation.cs" />
-    <Compile Include="Exceptions\NapDbInitializationException.cs" />
+    <Compile Include="Abstractions\IDataSet.cs" />
+    <Compile Include="Assurance\ConfigAssure.cs" />
+    <Compile Include="Config\Builders\INapDbConfigBuilder.cs" />
+    <Compile Include="Config\Builders\NapDbConfigBuilder.cs" />
+    <Compile Include="Config\GlobalDefaults.cs" />
+    <Compile Include="Config\NapDbConfiguration.cs" />
     <Compile Include="Exceptions\NapDbException.cs" />
-    <Compile Include="FileSystem\NapDbFileIO.cs" />
+    <Compile Include="Helpers\ReflectionHelper.cs" />
     <Compile Include="NapDb.cs" />
-    <Compile Include="NapDbSet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Caching\" />
+    <Folder Include="FileSystem\" />
     <Folder Include="Proxy\" />
     <Folder Include="Serialization\" />
   </ItemGroup>

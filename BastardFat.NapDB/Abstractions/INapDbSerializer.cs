@@ -1,12 +1,12 @@
 ﻿namespace BastardFat.NapDB.Abstractions
 {
-    public interface INapDbSerializer<TKey>
+    public interface IEntitySerializer<TKey>
     {
         byte[] Serialize<TEntity>(TEntity model) 
-            where TEntity : class, INapDbEntity<TKey>, new();
+            where TEntity : class, IEntity<TKey>, new();
 
         TEntity Deserialize<TEntity>(byte[] content) 
-            where TEntity : class, INapDbEntity<TKey>, new();
+            where TEntity : class, IEntity<TKey>, new();
 
         string GetSignature(byte[] content);
 

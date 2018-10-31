@@ -1,23 +1,23 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace BastardFat.NapDB.Abstractions
 {
-    public interface INapDbSet
+    public interface IDataSet
     {
         string Name { get; }
-        string GetFolderName();
+        string FolderName { get; }
         int Count();
+        Type GetEntityType();
     }
 
-    public interface INapDbSet<TKey>: INapDbSet
+    public interface IDataSet<TKey>: IDataSet
     {
-        void Initialize(INapDb<TKey> database, string name);
-
         INapDb<TKey> Database { get; }
     }
 
-    public interface INapDbSet<TEntity, TKey> : INapDbSet<TKey>, IEnumerable<TEntity> 
-        where TEntity : class, INapDbEntity<TKey>, new()
+    public interface IDataSet<TEntity, TKey> : IDataSet<TKey>, IEnumerable<TEntity> 
+        where TEntity : class, IEntity<TKey>, new()
     {
         TEntity Find(TKey id);
         IEnumerable<TEntity> Find(IEnumerable<TKey> ids);
@@ -26,14 +26,12 @@ namespace BastardFat.NapDB.Abstractions
         void Delete(TKey id);
     }
 
-    public interface INapDbSet<TEntity, TMeta, TKey> : INapDbSet<TEntity, TKey>
-         where TEntity : class, INapDbEntity<TKey>, new()
+    public interface IDataSet<TEntity, TMeta, TKey> : IDataSet<TEntity, TKey>
+         where TEntity : class, IEntity<TKey>, new()
          where TMeta : class, INapDbMeta<TKey>, new()
     {
         TMeta GetMetaObject();
         TMeta SaveMetaObject(TMeta meta);
     }
-
-    
 
 }
