@@ -9,11 +9,6 @@
             where TEntity : class, IEntity<TKey>, new();
 
         string GetSignature(byte[] content);
-
-        string StringifyId(TKey key);
-        TKey ParseId(string key);
-
-        string FileExtension { get; }
     }
 
 }

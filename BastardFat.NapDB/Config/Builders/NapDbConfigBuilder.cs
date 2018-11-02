@@ -81,17 +81,18 @@ namespace BastardFat.NapDB.Config.Builders
         }
 
         IDataSetConfigBuilder<TDb, TKey, TEntity> 
-            IDataSetConfigBuilder<TDb, TKey, TEntity>.UseCustomMetadata<TMeta>()
-        {
-            _dataSetConfig.MetaType = typeof(TMeta);
-            return this;
-        }
-
-        IDataSetConfigBuilder<TDb, TKey, TEntity> 
             IDataSetConfigBuilder<TDb, TKey, TEntity>.UseCustomReader
             (IFileReader reader)
         {
             _dataSetConfig.Reader = reader;
+            return this;
+        }
+
+        IDataSetConfigBuilder<TDb, TKey, TEntity>
+            IDataSetConfigBuilder<TDb, TKey, TEntity>.UseCustomNameResolver
+            (IFileNameResolver<TKey> resolver)
+        {
+            _dataSetConfig.NameResolver = resolver;
             return this;
         }
 
@@ -147,6 +148,35 @@ namespace BastardFat.NapDB.Config.Builders
             IEntityPropertyConfigBuilder<TDb, TKey, TEntity, TProp>.HasManyReferencesTo<TRefEntity>
             (Expression<Func<TDb, IDataSet<TRefEntity, TKey>>> referencesTo)
         {
+            InitReference(referencesTo);
+            return new RelationConfigBuilder<TDb, TKey, TEntity, TProp, TRefEntity>(_propertyConfig.Reference, this);
+        }
+
+        IOneRelationConfigBuilder<TDb, TKey, TEntity, TProp, TRefEntity> 
+            IEntityPropertyConfigBuilder<TDb, TKey, TEntity, TProp>.HasOneReferenceTo<TRefEntity>
+            (Expression<Func<TDb, IDataSet<TRefEntity, TKey>>> referenceTo)
+        {
+            InitReference(referenceTo);
+            return new RelationConfigBuilder<TDb, TKey, TEntity, TProp, TRefEntity>(_propertyConfig.Reference, this);
+        }
+
+        IBackRelationsConfigBuilder<TDb, TKey, TEntity, TProp, TRefEntity> 
+            IEntityPropertyConfigBuilder<TDb, TKey, TEntity, TProp>.IsBackReferencesTo<TRefEntity>
+            (Expression<Func<TDb, IDataSet<TRefEntity, TKey>>> referencesTo)
+        {
+            InitReference(referencesTo);
+            return new RelationConfigBuilder<TDb, TKey, TEntity, TProp, TRefEntity>(_propertyConfig.Reference, this);
+        }
+
+        IDataSetConfigBuilder<TDb, TKey, TEntity>
+            IEntityPropertyConfigBuilder<TDb, TKey, TEntity, TProp>.BuildPropertyConfiguration()
+        {
+            return _parentBuilder;
+        }
+
+        private void InitReference<TRefEntity>(Expression<Func<TDb, IDataSet<TRefEntity, TKey>>> referencesTo)
+            where TRefEntity : class, IEntity<TKey>, new()
+        {
             _propertyConfig.IsReference = true;
 
             referencesTo.GetPropertyInfo();
@@ -155,27 +185,7 @@ namespace BastardFat.NapDB.Config.Builders
             ConfigAssure.DataSetIsInitialized<TDb, TKey>(referencedSet);
             ConfigAssure.ConfigContainsDataSet(_propertyConfig.DataSetConfig.DbConfig, referencedSet);
 
-            return new RelationConfigBuilder<TDb, TKey, TEntity, TProp, TRefEntity>(referencedSet, _propertyConfig.Reference, this);
-        }
-
-        IOneRelationConfigBuilder<TDb, TKey, TEntity, TProp, TRefEntity> 
-            IEntityPropertyConfigBuilder<TDb, TKey, TEntity, TProp>.HasOneReferenceTo<TRefEntity>
-            (Expression<Func<TDb, IDataSet<TRefEntity, TKey>>> referenceTo)
-        {
-            throw new NotImplementedException();
-        }
-
-        IBackRelationsConfigBuilder<TDb, TKey, TEntity, TProp, TRefEntity> 
-            IEntityPropertyConfigBuilder<TDb, TKey, TEntity, TProp>.IsBackReferencesTo<TRefEntity>
-            (Expression<Func<TDb, IDataSet<TRefEntity, TKey>>> referencesTo)
-        {
-            throw new NotImplementedException();
-        }
-
-        IDataSetConfigBuilder<TDb, TKey, TEntity>
-            IEntityPropertyConfigBuilder<TDb, TKey, TEntity, TProp>.BuildPropertyConfiguration()
-        {
-            return _parentBuilder;
+            _propertyConfig.Reference = new ReferenceConfiguration<TDb, TKey> { SourceDataSet = referencedSet };
         }
     }
 
@@ -188,34 +198,61 @@ namespace BastardFat.NapDB.Config.Builders
         where TEntity : class, IEntity<TKey>, new()
         where TRefEntity : class, IEntity<TKey>, new()
     {
-        public RelationConfigBuilder(IDataSet<TRefEntity, TKey> referencedSet, ReferenceConfiguration<TDb, TKey> reference, EntityPropertyConfigBuilder<TDb, TKey, TEntity, TProp> entityPropertyConfigBuilder)
+        private readonly ReferenceConfiguration<TDb, TKey> _refConfig;
+        private readonly IEntityPropertyConfigBuilder<TDb, TKey, TEntity, TProp> _parentBuilder;
+
+        public RelationConfigBuilder(
+            ReferenceConfiguration<TDb, TKey> refConfig,
+            IEntityPropertyConfigBuilder<TDb, TKey, TEntity, TProp> parentBuilder)
         {
+            _refConfig = refConfig;
+            _parentBuilder = parentBuilder;
         }
 
-        IEntityPropertyConfigBuilder<TDb, TKey, TEntity, TProp> IRelationConfigBuilder<TDb, TKey, TEntity, TProp, TRefEntity>.BuildRelationConfiguration()
+        IRelationConfigBuilder<TDb, TKey, TEntity, TProp, TRefEntity> 
+            IOneRelationConfigBuilder<TDb, TKey, TEntity, TProp, TRefEntity>.UsingForeignKey
+            (Expression<Func<TEntity, TKey>> foreignKey)
         {
-            throw new NotImplementedException();
+            var foreignKeyProp = foreignKey.GetPropertyInfo();
+            _refConfig.ForeignKeyProperty = foreignKeyProp;
+            _refConfig.Kind = ReferenceKind.OneToMany;
+            return this;
         }
 
-        IRelationConfigBuilder<TDb, TKey, TEntity, TProp, TRefEntity> IOneRelationConfigBuilder<TDb, TKey, TEntity, TProp, TRefEntity>.UsingForeignKey(Expression<Func<TEntity, TKey>> foreignKey)
+        IRelationConfigBuilder<TDb, TKey, TEntity, TProp, TRefEntity> 
+            IManyRelationsConfigBuilder<TDb, TKey, TEntity, TProp, TRefEntity>.UsingForeignKeys
+            (Expression<Func<TEntity, IEnumerable<TKey>>> foreignKeys)
         {
-            throw new NotImplementedException();
+            var foreignKeyProp = foreignKeys.GetPropertyInfo();
+            _refConfig.ForeignKeyProperty = foreignKeyProp;
+            _refConfig.Kind = ReferenceKind.ManyToMany;
+            return this;
         }
 
-        IRelationConfigBuilder<TDb, TKey, TEntity, TProp, TRefEntity> IManyRelationsConfigBuilder<TDb, TKey, TEntity, TProp, TRefEntity>.UsingForeignKeys(Expression<Func<TEntity, IEnumerable<TKey>>> foreignKeys)
+        IRelationConfigBuilder<TDb, TKey, TEntity, TProp, TRefEntity> 
+            IBackRelationsConfigBuilder<TDb, TKey, TEntity, TProp, TRefEntity>.UsingManyForeignKeys
+            (Expression<Func<TRefEntity, IEnumerable<TKey>>> foreignKeys)
         {
-            throw new NotImplementedException();
+            var foreignKeyProp = foreignKeys.GetPropertyInfo();
+            _refConfig.ForeignKeyProperty = foreignKeyProp;
+            _refConfig.Kind = ReferenceKind.BackFromMany;
+            return this;
         }
 
-        IRelationConfigBuilder<TDb, TKey, TEntity, TProp, TRefEntity> IBackRelationsConfigBuilder<TDb, TKey, TEntity, TProp, TRefEntity>.UsingManyForeignKeys(Expression<Func<TRefEntity, IEnumerable<TKey>>> foreignKeys)
+        IRelationConfigBuilder<TDb, TKey, TEntity, TProp, TRefEntity> 
+            IBackRelationsConfigBuilder<TDb, TKey, TEntity, TProp, TRefEntity>.UsingOneForeignKey
+            (Expression<Func<TRefEntity, TKey>> foreignKey)
         {
-            throw new NotImplementedException();
+            var foreignKeyProp = foreignKey.GetPropertyInfo();
+            _refConfig.ForeignKeyProperty = foreignKeyProp;
+            _refConfig.Kind = ReferenceKind.BackFromOne;
+            return this;
         }
 
-        IRelationConfigBuilder<TDb, TKey, TEntity, TProp, TRefEntity> IBackRelationsConfigBuilder<TDb, TKey, TEntity, TProp, TRefEntity>.UsingOneForeignKey(Expression<Func<TRefEntity, TKey>> foreignKey)
+        IEntityPropertyConfigBuilder<TDb, TKey, TEntity, TProp> 
+            IRelationConfigBuilder<TDb, TKey, TEntity, TProp, TRefEntity>.BuildRelationConfiguration()
         {
-            throw new NotImplementedException();
+            return _parentBuilder;
         }
     }
-
 }

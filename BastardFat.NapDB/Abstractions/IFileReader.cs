@@ -4,10 +4,12 @@ namespace BastardFat.NapDB.Abstractions
 {
     public interface IFileReader
     {
-        byte[] Read(string fileName);
+        byte[] Read(string folderPath, string name);
 
-        void Write(string fileName, byte[] content);
+        void Write(string folderPath, string name, byte[] content);
 
-        IEnumerable<string> Search(string pattern);
+        void Remove(string folderPath, string name);
+
+        IEnumerable<string> Search(string folderPath, string pattern);
     }
 }

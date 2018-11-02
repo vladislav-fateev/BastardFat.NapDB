@@ -1,13 +1,10 @@
 ﻿using BastardFat.NapDB.Abstractions;
-using BastardFat.NapDB.Config.Builders;
 using BastardFat.NapDB.Helpers;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BastardFat.NapDB.Config
 {
@@ -18,9 +15,13 @@ namespace BastardFat.NapDB.Config
         {
             Db = db;
 
-            RootPath = Path.Combine(Environment.CurrentDirectory, "_data", typeof(TDb).Name);
+            RootPath = Path.Combine(Environment.CurrentDirectory, "Data", typeof(TDb).Name);
 
-            DataSetConfigs = db.AllDataSets().ToDictionary(ds => ds.Name, ds => new DataSetConfiguration<TDb, TKey>(this, ds));
+            DataSetConfigs = db
+                .AllDataSets()
+                .ToDictionary(
+                    ds => ds.Name,
+                    ds => new DataSetConfiguration<TDb, TKey>(this, ds));
         }
 
         public TDb Db { get; }
@@ -42,13 +43,15 @@ namespace BastardFat.NapDB.Config
             IsReadOnly = false;
             Serializer = GlobalDefaults.CreateDefaultSerializer<TKey>();
             Reader = GlobalDefaults.CreateDefaultReader();
-            MetaType = GlobalDefaults.CreateDefaultMeta<TKey>();
+            NameResolver = GlobalDefaults.CreateDefaultNameResolver<TKey>();
 
             PropertyConfigs = dataSet
                 .GetEntityType()
                 .GetProperties()
                 .Where(ReflectionHelper.IsPropertyConfigurable)
-                .ToDictionary(p => p.Name, p => new EntityPropertyConfiguration<TDb, TKey>(this, p));
+                .ToDictionary(
+                    p => p.Name, 
+                    p => new EntityPropertyConfiguration<TDb, TKey>(this, p));
         }
 
         public NapDbConfiguration<TDb, TKey> DbConfig { get; }
@@ -58,7 +61,7 @@ namespace BastardFat.NapDB.Config
         public bool IsReadOnly { get; set; }
         public IEntitySerializer<TKey> Serializer { get; set; }
         public IFileReader Reader { get; set; }
-        public Type MetaType { get; set; }
+        public IFileNameResolver<TKey> NameResolver { get; set; }
 
         public Dictionary<string, EntityPropertyConfiguration<TDb, TKey>> PropertyConfigs { get; set; }
     }
@@ -90,7 +93,7 @@ namespace BastardFat.NapDB.Config
         where TDb : INapDb<TKey>
     {
         public ReferenceKind Kind { get; set; }
-        public string SourceDataSetName { get; set; }
+        public IDataSet<TKey> SourceDataSet { get; set; }
         public PropertyInfo ForeignKeyProperty { get; set; }
     }
 

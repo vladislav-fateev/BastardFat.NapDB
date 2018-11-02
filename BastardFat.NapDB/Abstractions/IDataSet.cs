@@ -22,13 +22,12 @@ namespace BastardFat.NapDB.Abstractions
         TEntity Find(TKey id);
         IEnumerable<TEntity> Find(IEnumerable<TKey> ids);
         TEntity Save(TEntity entity);
-        IEnumerable<TEntity> WherePropertyIs<TValue>(string propertyName, TValue value);
         void Delete(TKey id);
     }
 
     public interface IDataSet<TEntity, TMeta, TKey> : IDataSet<TEntity, TKey>
          where TEntity : class, IEntity<TKey>, new()
-         where TMeta : class, INapDbMeta<TKey>, new()
+         where TMeta : class, IDataSetMeta<TKey>, new()
     {
         TMeta GetMetaObject();
         TMeta SaveMetaObject(TMeta meta);

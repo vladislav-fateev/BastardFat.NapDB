@@ -1,9 +1,9 @@
 ﻿namespace BastardFat.NapDB.Abstractions
 {
-    public interface INapDbMeta<TKey> : IEntity<TKey>
+    public interface IDataSetMeta<TKey> : IEntity<TKey>
     {
         TKey GetNextId();
-        TKey GetMetaId();
+        TKey GetNullId();
     }
 
 }

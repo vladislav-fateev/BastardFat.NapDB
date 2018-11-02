@@ -1,4 +1,6 @@
 ﻿using BastardFat.NapDB.Abstractions;
+using BastardFat.NapDB.Implementation;
+using BastardFat.NapDB.Serializers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,16 +13,16 @@ namespace BastardFat.NapDB.Config
     {
         public static IEntitySerializer<TKey> CreateDefaultSerializer<TKey>()
         {
-            return null;
+            return new DefaultXmlSerializer<TKey>();
         }
         public static IFileReader CreateDefaultReader()
         {
-            return null;
+            return new FileReader(FileReaderFolderCreationMode.CreateWhenWrite | FileReaderFolderCreationMode.CreateWhenSearch);
         }
 
-        public static Type CreateDefaultMeta<TKey>()
+        internal static IFileNameResolver<TKey> CreateDefaultNameResolver<TKey>()
         {
-            return null;
+            return new FileNameResolver<TKey>();
         }
     }
 }

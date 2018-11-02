@@ -34,7 +34,7 @@ namespace BastardFat.NapDB.Config.Builders
 
         IDataSetConfigBuilder<TDb, TKey, TEntity> UseCustomReader(IFileReader reader);
 
-        IDataSetConfigBuilder<TDb, TKey, TEntity> UseCustomMetadata<TMeta>() where TMeta : INapDbMeta<TKey>, new();
+        IDataSetConfigBuilder<TDb, TKey, TEntity> UseCustomNameResolver(IFileNameResolver<TKey> resolver);
 
         IEntityPropertyConfigBuilder<TDb, TKey, TEntity, TProp> ConfigureProperty<TProp>(Expression<Func<TEntity, TProp>> property);
 
