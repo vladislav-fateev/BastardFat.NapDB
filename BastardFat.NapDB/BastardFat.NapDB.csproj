@@ -28,9 +28,14 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\packages\Castle.Core.4.3.1\lib\net45\Castle.Core.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -42,6 +47,7 @@
   <ItemGroup>
     <Compile Include="Abstractions\DataStructs\FileNameSegments.cs" />
     <Compile Include="Abstractions\IFileNameResolver.cs" />
+    <Compile Include="Abstractions\ILocker.cs" />
     <Compile Include="Abstractions\INapDb.cs" />
     <Compile Include="Abstractions\IEntity.cs" />
     <Compile Include="Abstractions\IDataSetMeta.cs" />
@@ -49,23 +55,46 @@
     <Compile Include="Abstractions\IEntitySerializer.cs" />
     <Compile Include="Abstractions\IDataSet.cs" />
     <Compile Include="Assurance\ConfigAssure.cs" />
-    <Compile Include="Config\Builders\INapDbConfigBuilder.cs" />
+    <Compile Include="Abstractions\DataStructs\CachedSearchResult.cs" />
+    <Compile Include="Abstractions\DataStructs\CachedValue.cs" />
+    <Compile Include="Caching\MemoryCache.cs" />
+    <Compile Include="Caching\MemoryCacheFactory.cs" />
+    <Compile Include="Abstractions\DataStructs\SearchQuery.cs" />
+    <Compile Include="Config\Builders\DataSetConfigBuilder.cs" />
+    <Compile Include="Config\Builders\EntityPropertyConfigBuilder.cs" />
+    <Compile Include="Config\Builders\Interfaces\IBackRelationsConfigBuilder.cs" />
+    <Compile Include="Config\Builders\Interfaces\IDataSetConfigBuilder.cs" />
+    <Compile Include="Config\Builders\Interfaces\IEntityPropertyConfigBuilder.cs" />
+    <Compile Include="Config\Builders\Interfaces\IManyRelationsConfigBuilder.cs" />
+    <Compile Include="Config\Builders\Interfaces\INapDbConfigBuilder.cs" />
+    <Compile Include="Config\Builders\Interfaces\IOneRelationConfigBuilder.cs" />
+    <Compile Include="Config\Builders\Interfaces\IRelationConfigBuilder.cs" />
     <Compile Include="Config\Builders\NapDbConfigBuilder.cs" />
+    <Compile Include="Config\Builders\RelationConfigBuilder.cs" />
+    <Compile Include="Config\DataSetConfiguration.cs" />
+    <Compile Include="Config\EntityPropertyConfiguration.cs" />
     <Compile Include="Config\GlobalDefaults.cs" />
     <Compile Include="Config\NapDbConfiguration.cs" />
+    <Compile Include="Config\ReferenceConfiguration.cs" />
+    <Compile Include="Config\ReferenceKind.cs" />
     <Compile Include="DataSet.cs" />
     <Compile Include="Exceptions\NapDbException.cs" />
+    <Compile Include="FileSystem\FileReaderFolderCreationMode.cs" />
     <Compile Include="Helpers\ReflectionHelper.cs" />
-    <Compile Include="Implementation\FileNameResolver.cs" />
-    <Compile Include="Implementation\FileReader.cs" />
+    <Compile Include="FileSystem\FileNameResolver.cs" />
+    <Compile Include="FileSystem\FileReader.cs" />
+    <Compile Include="Locking\LockerWrapper.cs" />
+    <Compile Include="Locking\MutexLocker.cs" />
     <Compile Include="Metadatas\Int32IncrementMetadata.cs" />
     <Compile Include="NapDb.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Proxy\Interceptors\DataSetInterceptor.cs" />
+    <Compile Include="Proxy\ProxyGeneratorFactory.cs" />
     <Compile Include="Serializers\DefaultXmlSerializer.cs" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Caching\" />
-    <Folder Include="Proxy\" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

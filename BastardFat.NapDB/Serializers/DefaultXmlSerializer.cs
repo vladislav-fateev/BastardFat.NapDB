@@ -12,28 +12,40 @@ namespace BastardFat.NapDB.Serializers
 {
     public class DefaultXmlSerializer<TKey> : IEntitySerializer<TKey>
     {
-        public string GetSignature(byte[] content)
+        public virtual string GetSignature(byte[] content)
         {
             using (MD5 md5 = MD5.Create())
                 return BitConverter.ToString(md5.ComputeHash(content)).Replace("-", "");
         }
 
-        TEntity IEntitySerializer<TKey>.Deserialize<TEntity>(byte[] content)
+        public virtual TEntity Deserialize<TEntity>(byte[] content)
+            where TEntity : class, IEntity<TKey>, new()
         {
             var xmlstring = Encoding.Unicode.GetString(content);
-            var serializer = new XmlSerializer(typeof(TEntity));
+            var serializer = GetXmlSerializer(typeof(TEntity));
             using (var stringReader = new StringReader(xmlstring))
                 return serializer.Deserialize(stringReader) as TEntity;
         }
 
-        byte[] IEntitySerializer<TKey>.Serialize<TEntity>(TEntity model)
+        public virtual byte[] Serialize<TEntity>(TEntity model)
+            where TEntity : class, IEntity<TKey>, new()
         {
-            var serializer = new XmlSerializer(typeof(TEntity));
+            var serializer = GetXmlSerializer(typeof(TEntity));
             using (var stringwriter = new StringWriter())
             {
                 serializer.Serialize(stringwriter, model);
                 return Encoding.Unicode.GetBytes(stringwriter.ToString());
             }
+        }
+
+        private static Dictionary<Type, XmlSerializer> _serializerInstances = new Dictionary<Type, XmlSerializer>();
+        private XmlSerializer GetXmlSerializer(Type type)
+        {
+            if (!_serializerInstances.ContainsKey(type))
+                lock (_serializerInstances)
+                    if (!_serializerInstances.ContainsKey(type))
+                        _serializerInstances[type] = new XmlSerializer(type);
+            return _serializerInstances[type];
         }
     }
 }

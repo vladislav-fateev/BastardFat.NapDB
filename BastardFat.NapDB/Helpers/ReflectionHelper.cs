@@ -83,5 +83,12 @@ namespace BastardFat.NapDB.Helpers
         {
             return typeof(IEnumerable<>).MakeGenericType(elementType) == type;
         }
+
+        public static bool IsPropertyGenericInterfaceDefinition(PropertyInfo property, Type ifaceGenericDefinition)
+        {
+            return property.PropertyType.IsInterface &&
+                property.PropertyType.IsGenericType &&
+                property.PropertyType.GetGenericTypeDefinition() == ifaceGenericDefinition;
+        }
     }
 }

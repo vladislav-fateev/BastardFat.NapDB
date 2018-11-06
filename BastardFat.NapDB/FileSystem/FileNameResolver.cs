@@ -8,25 +8,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BastardFat.NapDB.Implementation
+namespace BastardFat.NapDB.FileSystem
 {
-    internal class FileNameResolver<TKey> : IFileNameResolver<TKey>
+    public class FileNameResolver<TKey> : IFileNameResolver<TKey>
     {
         private const string NullStringReplacer = "_null_";
 
-        public string GetFilename(FileNameSegments segments)
+        public virtual string GetFilename(FileNameSegments segments)
         {
             var allSegments = new[] { segments.Key ?? NullStringReplacer, segments.Signature ?? NullStringReplacer }.Concat(segments.AdditionalSegments.Select(x => x.Value));
             return String.Join(".", allSegments.Select(x => x ?? NullStringReplacer));
         }
 
-        public string GetSearchPattern(FileNameSegments segments)
+        public virtual string GetSearchPattern(FileNameSegments segments)
         {
             var allSegments = new[] { segments.Key ?? "*", segments.Signature ?? "*" }.Concat(segments.AdditionalSegments.Select(x => x.Value));
             return String.Join(".", allSegments.Select(x => x ?? "*"));
         }
 
-        public FileNameSegments GetSegments(string filename, string[] additionalSegmentsNames)
+        public virtual FileNameSegments GetSegments(string filename, string[] additionalSegmentsNames)
         {
             var segments = filename
                 .Split('.')
@@ -48,7 +48,7 @@ namespace BastardFat.NapDB.Implementation
 
         }
 
-        public TKey ParseKey(string keyString)
+        public virtual TKey ParseKey(string keyString)
         {
             try
             {
@@ -62,7 +62,7 @@ namespace BastardFat.NapDB.Implementation
                 throw NotSupported(ex);
             }
         }
-        public string StringifyKey(TKey key)
+        public virtual string StringifyKey(TKey key)
         {
             try
             {
@@ -80,7 +80,8 @@ namespace BastardFat.NapDB.Implementation
 
         private static NapDbException NotSupported(Exception inner = null)
         {
-            return new NapDbException($"Type {typeof(TKey).FullName} is not supported as key. You must implement your own IFileNameResolver<TKey>", inner);
+            return new NapDbException($"Type {typeof(TKey).FullName} is not supported as key. " +
+                $"You must implement your own IFileNameResolver<TKey> or override ParseKey and StringifyKey", inner);
         }
     }
 }

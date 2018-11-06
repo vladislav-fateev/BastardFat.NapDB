@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace BastardFat.NapDB.Abstractions
 {
@@ -11,5 +12,7 @@ namespace BastardFat.NapDB.Abstractions
         void Remove(string folderPath, string name);
 
         IEnumerable<string> Search(string folderPath, string pattern);
+
+        bool HasChangedSince(string folderPath, DateTime since);
     }
 }

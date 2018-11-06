@@ -6,39 +6,24 @@ using BastardFat.NapDB.Config.Builders;
 using BastardFat.NapDB.Metadatas;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
+using BastardFat.NapDB.FileSystem;
+using System.Diagnostics;
+using BastardFat.NapDB.Tests.Support;
 
 namespace BastardFat.NapDB.Tests
 {
-    public class SmokeTestDb : NapDb<int, SmokeTestDb>
-    {
-        protected override void Configure(INapDbConfigBuilder<SmokeTestDb, int> builder)
-        {
-            builder
-                .UseRootFolderPath(SmokeTest.Path)
-                .ConfigureDataSet(x => x.SmokeTestDataset)
-                .UseFolderName("_smoke");
-        }
 
-        public IDataSet<SmokeTestEntity, Int32IncrementMetadata, int> SmokeTestDataset { get; set; }
-    }
-
-    public class SmokeTestEntity : IEntity<int>
-    {
-        public int Id { get; set; }
-        public string Data { get; set; }
-        public DateTime Created { get; set; }
-    }
 
     [TestClass]
     public class SmokeTest
     {
-        public const string Path = @"C:\dev\BastardFat.NapDB\_databases\SmokeTestDb";
+        public const string Path = @"C:\dev\BastardFat.NapDB\_databases\SmokeTestDb\";
 
         [TestMethod]
         public void Simple()
         {
             if (Directory.Exists(Path))
-                Directory.Delete(Path);
+                Directory.Delete(Path, true);
 
             var db = new SmokeTestDb();
             for (int i = 0; i < 5; i++)
@@ -57,7 +42,7 @@ namespace BastardFat.NapDB.Tests
 
             Assert.AreEqual(arr.Length, 5);
             Assert.AreEqual(arr[3].Data, "Test 3");
-
+            Assert.AreEqual(arr[3].Data, db.SmokeTestDataset.Find(arr[3].Id).Data);
         }
     }
 }

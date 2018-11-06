@@ -1,5 +1,6 @@
 ﻿using BastardFat.NapDB.Abstractions;
-using BastardFat.NapDB.Implementation;
+using BastardFat.NapDB.FileSystem;
+using BastardFat.NapDB.Locking;
 using BastardFat.NapDB.Serializers;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,11 @@ namespace BastardFat.NapDB.Config
         public static IFileReader CreateDefaultReader()
         {
             return new FileReader(FileReaderFolderCreationMode.CreateWhenWrite | FileReaderFolderCreationMode.CreateWhenSearch);
+        }
+
+        internal static ILocker CreateDefaultLocker(string databaseName)
+        {
+            return new MutexLocker(databaseName);
         }
 
         internal static IFileNameResolver<TKey> CreateDefaultNameResolver<TKey>()

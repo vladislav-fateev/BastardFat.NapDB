@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using BastardFat.NapDB.Locking;
+using System.Collections.Generic;
 
 namespace BastardFat.NapDB.Abstractions
 {
@@ -14,5 +15,6 @@ namespace BastardFat.NapDB.Abstractions
 
         IEnumerable<IDataSet<TKey>> AllDataSets();
 
+        LockerWrapper BeginLock();
     }
 }
