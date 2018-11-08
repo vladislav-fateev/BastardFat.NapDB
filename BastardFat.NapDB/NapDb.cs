@@ -92,6 +92,7 @@ namespace BastardFat.NapDB
                 ds.Serializer = datasetConfig.Value.Serializer;
                 ds.NameResolver = datasetConfig.Value.NameResolver;
                 ds.Reader = datasetConfig.Value.Reader;
+                ds.PropertyConfigs = datasetConfig.Value.PropertyConfigs;
             }
         }
 
@@ -139,12 +140,12 @@ namespace BastardFat.NapDB
         private void OnBeginLock()
         {
             foreach (var ds in _dataSets)
-                (ds as DataSet<TKey>).MetaCacheLock();
+                (ds as DataSet<TKey>).CacheLock();
         }
         private void OnEndLock()
         {
             foreach (var ds in _dataSets)
-                (ds as DataSet<TKey>).MetaCacheUnlock();
+                (ds as DataSet<TKey>).CacheUnlock();
         }
     }
 }

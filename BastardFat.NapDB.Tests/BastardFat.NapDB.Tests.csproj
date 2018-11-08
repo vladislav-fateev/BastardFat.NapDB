@@ -51,8 +51,10 @@
     <Compile Include="PerformanceTest.cs" />
     <Compile Include="SmokeTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Support\GuidKeyTest.cs" />
     <Compile Include="Support\PerformanceTest.cs" />
     <Compile Include="Support\SmokeTest.cs" />
+    <Compile Include="GuidKeyTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -1,6 +1,7 @@
 ﻿using BastardFat.NapDB.Abstractions;
 using BastardFat.NapDB.Abstractions.DataStructs;
 using BastardFat.NapDB.Caching;
+using BastardFat.NapDB.Config;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -25,14 +26,15 @@ namespace BastardFat.NapDB
         public IFileReader Reader { get; internal set; }
         public IFileNameResolver<TKey> NameResolver { get; internal set; }
         public bool EnableCaching { get; internal set; }
+        public Dictionary<string, EntityPropertyConfiguration<INapDb<TKey>, TKey>> PropertyConfigs { get; internal set; }
 
         public abstract int Count();
 
         public abstract Type GetEntityType();
 
-        public abstract void MetaCacheLock();
+        public abstract void CacheLock();
 
-        public abstract void MetaCacheUnlock();
+        public abstract void CacheUnlock();
     }
 
     internal class DataSet<TEntity, TMeta, TKey> : DataSet<TKey>, IDataSet<TEntity, TMeta, TKey>
@@ -173,13 +175,13 @@ namespace BastardFat.NapDB
             _meta = WriteEntity(meta, out _metaSignature);
             return _meta;
         }
-        public override void MetaCacheLock()
+        public override void CacheLock()
         {
             _meta = GetMetaObject();
             _dbLocked = true;
             _metaLockedAt = DateTime.Now;
         }
-        public override void MetaCacheUnlock()
+        public override void CacheUnlock()
         {
             _dbLocked = false;
             _meta = SaveMetaObject(_meta);

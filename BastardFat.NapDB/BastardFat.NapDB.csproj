@@ -85,6 +85,7 @@
     <Compile Include="FileSystem\FileReader.cs" />
     <Compile Include="Locking\LockerWrapper.cs" />
     <Compile Include="Locking\MutexLocker.cs" />
+    <Compile Include="Metadatas\GuidMetadata.cs" />
     <Compile Include="Metadatas\Int32IncrementMetadata.cs" />
     <Compile Include="NapDb.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
