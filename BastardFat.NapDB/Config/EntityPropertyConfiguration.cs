@@ -3,7 +3,17 @@ using System.Reflection;
 
 namespace BastardFat.NapDB.Config
 {
-    internal class EntityPropertyConfiguration<TDb, TKey>
+    internal class EntityPropertyConfiguration<TKey>
+    {
+        public PropertyInfo Property { get; protected set; }
+
+        public bool IsIndexed { get; set; }
+        public string IndexName { get; set; }
+        public bool IsReference { get; set; }
+        public ReferenceConfiguration<TKey> Reference { get; set; }
+    }
+
+    internal class EntityPropertyConfiguration<TDb, TKey> : EntityPropertyConfiguration<TKey>
         where TDb : INapDb<TKey>
     {
         public EntityPropertyConfiguration(DataSetConfiguration<TDb, TKey> dataSetConfig, PropertyInfo prop)
@@ -18,11 +28,5 @@ namespace BastardFat.NapDB.Config
         }
 
         public DataSetConfiguration<TDb, TKey> DataSetConfig { get; }
-        public PropertyInfo Property { get; }
-
-        public bool IsIndexed { get; set; }
-        public string IndexName { get; set; }
-        public bool IsReference { get; set; }
-        public ReferenceConfiguration<TDb, TKey> Reference { get; set; }
     }
 }

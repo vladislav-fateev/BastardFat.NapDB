@@ -89,6 +89,7 @@
     <Compile Include="Metadatas\Int32IncrementMetadata.cs" />
     <Compile Include="NapDb.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Proxy\Interceptors\EntityInterceptor.cs" />
     <Compile Include="Proxy\Interceptors\DataSetInterceptor.cs" />
     <Compile Include="Proxy\ProxyGeneratorFactory.cs" />
     <Compile Include="Serializers\DefaultXmlSerializer.cs" />

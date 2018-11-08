@@ -3,8 +3,7 @@ using System.Reflection;
 
 namespace BastardFat.NapDB.Config
 {
-    internal class ReferenceConfiguration<TDb, TKey>
-        where TDb : INapDb<TKey>
+    internal class ReferenceConfiguration<TKey>
     {
         public ReferenceKind Kind { get; set; }
         public IDataSet<TKey> SourceDataSet { get; set; }

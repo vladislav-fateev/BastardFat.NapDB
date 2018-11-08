@@ -48,13 +48,22 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PerformanceTest.cs" />
-    <Compile Include="SmokeTest.cs" />
+    <Compile Include="Keytypes\GuidKeyTestEntity.cs" />
+    <Compile Include="Performance\PerformanceMeasurer.cs" />
+    <Compile Include="Performance\PerformanceFileReader.cs" />
+    <Compile Include="Performance\PerformanceTest.cs" />
+    <Compile Include="Performance\PerformanceTestEntity.cs" />
+    <Compile Include="Performance\PerformanceXmlSerializer.cs" />
+    <Compile Include="Relations\OneToMany\OneToManyTest.cs" />
+    <Compile Include="Relations\OneToMany\OneToManyTestDb.cs" />
+    <Compile Include="Relations\OneToMany\OneToManyTestEntity.cs" />
+    <Compile Include="Smoke\SmokeTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Support\GuidKeyTest.cs" />
-    <Compile Include="Support\PerformanceTest.cs" />
-    <Compile Include="Support\SmokeTest.cs" />
-    <Compile Include="GuidKeyTest.cs" />
+    <Compile Include="Smoke\SmokeTestEntity.cs" />
+    <Compile Include="Keytypes\GuidKeyTestDb.cs" />
+    <Compile Include="Performance\PerformanceTestDb.cs" />
+    <Compile Include="Smoke\SmokeTestDb.cs" />
+    <Compile Include="Keytypes\GuidKeyTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

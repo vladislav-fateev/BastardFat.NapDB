@@ -2,6 +2,9 @@
 using BastardFat.NapDB.Abstractions.DataStructs;
 using BastardFat.NapDB.Caching;
 using BastardFat.NapDB.Config;
+using BastardFat.NapDB.Proxy;
+using BastardFat.NapDB.Proxy.Interceptors;
+using Castle.DynamicProxy;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -26,7 +29,7 @@ namespace BastardFat.NapDB
         public IFileReader Reader { get; internal set; }
         public IFileNameResolver<TKey> NameResolver { get; internal set; }
         public bool EnableCaching { get; internal set; }
-        public Dictionary<string, EntityPropertyConfiguration<INapDb<TKey>, TKey>> PropertyConfigs { get; internal set; }
+        internal Dictionary<string, EntityPropertyConfiguration<TKey>> PropertyConfigs { get; set; }
 
         public abstract int Count();
 
@@ -35,6 +38,7 @@ namespace BastardFat.NapDB
         public abstract void CacheLock();
 
         public abstract void CacheUnlock();
+        public abstract object FindObject(TKey id);
     }
 
     internal class DataSet<TEntity, TMeta, TKey> : DataSet<TKey>, IDataSet<TEntity, TMeta, TKey>
@@ -67,6 +71,12 @@ namespace BastardFat.NapDB
 
 
         #region Reading
+
+        public override object FindObject(TKey id)
+        {
+            return Find(id);
+        }
+
         public virtual TEntity Find(TKey id)
         {
             if (id.Equals(_nullKey))
@@ -110,6 +120,7 @@ namespace BastardFat.NapDB
                 entity.Id = meta.GetNextId();
                 SaveMetaObject(meta);
             }
+            entity = Unproxy(entity);
             entity = WriteEntity(entity, out string signature);
             entity = Proxy(entity);
             if (EnableCaching)
@@ -245,7 +256,16 @@ namespace BastardFat.NapDB
         }
         private TEntity Proxy(TEntity entity)
         {
-            // TODO: Implement Proxy
+            if (!ProxyUtil.IsProxy(entity))
+            {
+                entity = new ProxyGeneratorFactory().GetProxyGenerator().CreateClassProxyWithTarget(entity, new EntityInterceptor<TKey>(Database, PropertyConfigs));
+            }
+            return entity;
+        }
+        private TEntity Unproxy(TEntity entity)
+        {
+            if (ProxyUtil.IsProxy(entity))
+                entity = (TEntity)ProxyUtil.GetUnproxiedInstance(entity);
             return entity;
         }
         #endregion

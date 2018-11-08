@@ -1,17 +1,11 @@
 ﻿using System;
 using System.Linq;
-using System.Collections.Generic;
-using BastardFat.NapDB.Abstractions;
-using BastardFat.NapDB.Config.Builders;
-using BastardFat.NapDB.Metadatas;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
-using BastardFat.NapDB.FileSystem;
 using System.Diagnostics;
-using BastardFat.NapDB.Tests.Support;
 using BastardFat.NapDB.Locking;
 
-namespace BastardFat.NapDB.Tests
+namespace BastardFat.NapDB.Tests.Performance
 {
     [TestClass]
     public class PerformanceTest
@@ -73,7 +67,7 @@ namespace BastardFat.NapDB.Tests
             Trace.TraceInformation("Folders '{0}' and '{1}' are identical", p1, p2);
         }
 
-        private static long PrintMeasures(Measurer measurer, string message)
+        private static long PrintMeasures(PerformanceMeasurer measurer, string message)
         {
             long totalMeasurerTime = measurer.Measures.Sum(x => x.Value.Time.ElapsedMilliseconds);
             Trace.Indent();

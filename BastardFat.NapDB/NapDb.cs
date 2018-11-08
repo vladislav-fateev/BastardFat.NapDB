@@ -92,7 +92,7 @@ namespace BastardFat.NapDB
                 ds.Serializer = datasetConfig.Value.Serializer;
                 ds.NameResolver = datasetConfig.Value.NameResolver;
                 ds.Reader = datasetConfig.Value.Reader;
-                ds.PropertyConfigs = datasetConfig.Value.PropertyConfigs;
+                ds.PropertyConfigs = datasetConfig.Value.PropertyConfigs.ToDictionary(x => x.Key, x => (EntityPropertyConfiguration<TKey>) x.Value);
             }
         }
 

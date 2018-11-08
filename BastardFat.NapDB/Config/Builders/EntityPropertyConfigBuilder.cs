@@ -69,7 +69,7 @@ namespace BastardFat.NapDB.Config.Builders
             ConfigAssure.DataSetIsInitialized<TDb, TKey>(referencedSet);
             ConfigAssure.ConfigContainsDataSet(_propertyConfig.DataSetConfig.DbConfig, referencedSet);
 
-            _propertyConfig.Reference = new ReferenceConfiguration<TDb, TKey> { SourceDataSet = referencedSet };
+            _propertyConfig.Reference = new ReferenceConfiguration<TKey> { SourceDataSet = referencedSet };
         }
     }
 }

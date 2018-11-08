@@ -8,9 +8,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
 using BastardFat.NapDB.FileSystem;
 using System.Diagnostics;
-using BastardFat.NapDB.Tests.Support;
 
-namespace BastardFat.NapDB.Tests
+namespace BastardFat.NapDB.Tests.Smoke
 {
 
 

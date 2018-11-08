@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BastardFat.NapDB.Abstractions;
+﻿using BastardFat.NapDB.Abstractions;
 using BastardFat.NapDB.Config.Builders;
 using BastardFat.NapDB.Metadatas;
 
-namespace BastardFat.NapDB.Tests.Support
+namespace BastardFat.NapDB.Tests.Keytypes
 {
     public class GuidKeyTestDb : NapDb<string, GuidKeyTestDb>
     {
@@ -24,17 +19,5 @@ namespace BastardFat.NapDB.Tests.Support
         }
 
         public IDataSet<GuidKeyTestEntity, GuidMetadata, string> GuidKeyTestDataset { get; set; }
-    }
-
-    public class GuidKeyTestEntity : IEntity<string>
-    {
-        public GuidKeyTestEntity()
-        {
-            Id = GuidMetadata.GetDefaultId();
-        }
-
-        public string Id { get; set; }
-
-        public string Data { get; set; }
     }
 }

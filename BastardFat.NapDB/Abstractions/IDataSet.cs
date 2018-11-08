@@ -14,6 +14,7 @@ namespace BastardFat.NapDB.Abstractions
     public interface IDataSet<TKey>: IDataSet
     {
         INapDb<TKey> Database { get; }
+        object FindObject(TKey id);
     }
 
     public interface IDataSet<TEntity, TKey> : IDataSet<TKey>, IEnumerable<TEntity> 

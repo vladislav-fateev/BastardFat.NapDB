@@ -15,11 +15,11 @@ namespace BastardFat.NapDB.Config.Builders
         where TEntity : class, IEntity<TKey>, new()
         where TRefEntity : class, IEntity<TKey>, new()
     {
-        private readonly ReferenceConfiguration<TDb, TKey> _refConfig;
+        private readonly ReferenceConfiguration<TKey> _refConfig;
         private readonly IEntityPropertyConfigBuilder<TDb, TKey, TEntity, TProp> _parentBuilder;
 
         public RelationConfigBuilder(
-            ReferenceConfiguration<TDb, TKey> refConfig,
+            ReferenceConfiguration<TKey> refConfig,
             IEntityPropertyConfigBuilder<TDb, TKey, TEntity, TProp> parentBuilder)
         {
             _refConfig = refConfig;

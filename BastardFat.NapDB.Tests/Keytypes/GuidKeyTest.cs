@@ -3,10 +3,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using BastardFat.NapDB.Metadatas;
-using BastardFat.NapDB.Tests.Support;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace BastardFat.NapDB.Tests
+namespace BastardFat.NapDB.Tests.Keytypes
 {
     [TestClass]
     public class GuidKeyTest
