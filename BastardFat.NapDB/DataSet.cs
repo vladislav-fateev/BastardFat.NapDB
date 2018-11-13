@@ -39,6 +39,7 @@ namespace BastardFat.NapDB
 
         public abstract void CacheUnlock();
         public abstract object FindObject(TKey id);
+        public abstract IEnumerable<object> FindAllObjects();
     }
 
     internal class DataSet<TEntity, TMeta, TKey> : DataSet<TKey>, IDataSet<TEntity, TMeta, TKey>
@@ -75,6 +76,11 @@ namespace BastardFat.NapDB
         public override object FindObject(TKey id)
         {
             return Find(id);
+        }
+
+        public override IEnumerable<object> FindAllObjects()
+        {
+            return GetAllIds().Select(Find);
         }
 
         public virtual TEntity Find(TKey id)

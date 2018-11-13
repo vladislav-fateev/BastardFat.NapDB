@@ -4,6 +4,7 @@ using Castle.DynamicProxy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -38,6 +39,17 @@ namespace BastardFat.NapDB.Proxy.Interceptors
                     case ReferenceKind.ManyToMany:
                         break;
                     case ReferenceKind.BackFromOne:
+                        IEnumerable<object> enumerable = reference.SourceDataSet
+                            .FindAllObjects()
+                            .Where(x =>
+                               ((TKey)reference.ForeignKeyProperty.GetValue(x)).Equals((invocation.InvocationTarget as IEntity<TKey>).Id));
+
+                        var casted = typeof(Enumerable)
+                            .GetMethod("Cast", BindingFlags.Static | BindingFlags.Public)
+                            .MakeGenericMethod(reference.SourceDataSet.GetEntityType())
+                            .Invoke(null, new object[] { enumerable });
+
+                        invocation.ReturnValue = casted;
                         break;
                     case ReferenceKind.BackFromMany:
                         break;

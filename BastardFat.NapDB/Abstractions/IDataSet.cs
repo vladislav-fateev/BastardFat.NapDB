@@ -9,6 +9,7 @@ namespace BastardFat.NapDB.Abstractions
         string FolderName { get; }
         int Count();
         Type GetEntityType();
+        IEnumerable<object> FindAllObjects();
     }
 
     public interface IDataSet<TKey>: IDataSet

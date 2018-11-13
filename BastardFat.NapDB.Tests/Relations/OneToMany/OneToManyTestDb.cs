@@ -20,13 +20,23 @@ namespace BastardFat.NapDB.Tests.Relations.OneToMany
                     .ConfigureProperty(x => x.Phone)
                         .HasOneReferenceTo(x => x.Phones)
                             .UsingForeignKey(x => x.PhoneId)
-                            .BuildRelationConfiguration()
-                        .BuildPropertyConfiguration()
-                    .BuildDataSetConfiguration()
+                        .BuildRelationConfiguration()
+                    .BuildPropertyConfiguration()
+                    .ConfigureProperty(x => x.Parent)
+                        .HasOneReferenceTo(x => x.Companies)
+                            .UsingForeignKey(x => x.ParentId)
+                        .BuildRelationConfiguration()
+                    .BuildPropertyConfiguration()
+                .BuildDataSetConfiguration()
 
                 .ConfigureDataSet(x => x.Phones)
                     .EnableCaching()
-                    .BuildDataSetConfiguration();
+                    .ConfigureProperty(x => x.Companies)
+                        .IsBackReferencesTo(x => x.Companies)
+                            .UsingOneForeignKey(x => x.PhoneId)
+                        .BuildRelationConfiguration()
+                    .BuildPropertyConfiguration()
+                .BuildDataSetConfiguration();
         }
 
         public IDataSet<OneToManyTest_Company, Int32IncrementMetadata, int> Companies { get; set; }
