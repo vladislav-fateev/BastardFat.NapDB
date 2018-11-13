@@ -7,6 +7,7 @@ namespace BastardFat.NapDB.Tests.Smoke
     {
         public virtual int Id { get; set; }
         public virtual string Data { get; set; }
+        public virtual int Counter { get; set; }
         public virtual DateTime Created { get; set; }
     }
 }
